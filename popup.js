@@ -1,11 +1,13 @@
-
+const disable = ["true","false"];
 
 
 function insertNames(mangaDictionary){
 	var bookmark;
-	var splitName;
 	var mangaName;
+	var splitName;
 	var splitURL;
+	var checkbox;
+	var deleteButton;
 	var i;
 	var breakLine = document.createElement('br');
 	var size = Object.keys(mangaDictionary).length;
@@ -21,6 +23,12 @@ function insertNames(mangaDictionary){
 			document.body.appendChild(breakLine);
 			breakLine = document.createElement('br');
 			bookmark = document.createElement('a');
+			checkbox = document.createElement("INPUT");
+			checkbox.setAttribute("type", "checkbox");
+			checkbox.setAttribute("id", manga);
+			checkbox.setAttribute("class", "check");
+			checkbox.setAttribute("disabled", "true");
+			document.body.appendChild(checkbox);
 			splitName = manga.split("-");
 			splitURL = mangaDictionary[manga].split("/");
 			mangaName = '';
@@ -50,11 +58,17 @@ function insertNames(mangaDictionary){
 					mangaName = mangaName + splitURL2[i][0].toUpperCase() + splitURL2[i].substring(1,) + ' ';
 				}	
 			}
+			// else{
+			// 	mangaName = mangaName + mangaDictionary[manga];
+			// }
 			bookmark.innerHTML = mangaName;
 			bookmark.href = mangaDictionary[manga];
 			bookmark.target = "_blank"
+			bookmark.setAttribute("id", splitName[0]);
 			document.body.appendChild(bookmark);
 		}
+	document.body.appendChild(breakLine);
+	breakLine = document.createElement('br');
 	}
 	var sites = document.createElement('a');
 	sites.innerHTML = "Compatible Sites";
@@ -63,13 +77,54 @@ function insertNames(mangaDictionary){
 	var button = document.createElement("BUTTON");
 	button.appendChild(sites);
 	document.body.appendChild(button);
-	
+	var deleteButton = document.createElement("BUTTON");
+	deleteButton.innerHTML = "Delete";
+	deleteButton.setAttribute("id", "deleteButton");
+	document.body.appendChild(deleteButton);
 }
 
+
+
+
+let onclick = function (mangaDictionary){
+	var box;
+	var link;
+	var i;
+	var check = document.getElementsByClassName("check");
+	var splitName;
+	if (disable[0] === "true"){
+		for (i = 0; i < check.length; i++) {
+			check[i].removeAttribute("disabled");
+		}
+		disable[0] = "false";
+	}
+	else if (disable[0] === "false"){
+		for (i = 0; i < check.length; i++) {
+			check[i].setAttribute("disabled", "true");
+			for (manga in mangaDictionary){
+				if (document.getElementById(manga).checked === true){
+					delete mangaDictionary[manga];
+					box = document.getElementById(manga);
+					box.remove();
+					splitName = manga.split("-");
+					link = document.getElementById(splitName[0]);
+					link.remove();
+				}
+			}
+		}
+		disable[0] = "true";
+	}
+};
+
+		
 
 document.addEventListener('DOMContentLoaded', function(){
 	const bookmarks = chrome.extension.getBackgroundPage();
 	insertNames(bookmarks.mangas);
-}, false);
+	document.querySelector('#deleteButton').addEventListener("click", function(){
+		onclick(bookmarks.mangas);
+	});
+});
+
 
 

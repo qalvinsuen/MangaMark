@@ -72,8 +72,8 @@ chrome.runtime.onMessage.addListener(function (request,sender,sendResponse){
 		}
 	}
 	// else, do not add to manga list
-	console.log(splitURL);
-	console.log(request.url);
+	// console.log(splitURL);
+	// console.log(request.url);
 	console.log(window.mangas);
 	
 });
