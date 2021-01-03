@@ -3,7 +3,9 @@
 window.mangas = {};
 chrome.runtime.onMessage.addListener(function (request,sender,sendResponse){
 	var i;
+	var j;
 	var splitURL;
+	var uncap;
 	// var size = Object.keys(mangas).length;
 	
 	splitURL = request.url.split("/");
@@ -18,7 +20,8 @@ chrome.runtime.onMessage.addListener(function (request,sender,sendResponse){
 			// checks if splitURL[4] is a chapter number
 			if (!isNaN(parseInt(splitURL[4]))){
 				// update bookmark link to chapter/page
-				window.mangas[splitURL[3]] = request.url;
+				uncap = splitURL[3][0].toLowerCase() + splitURL[3].substring(1,);
+				window.mangas[uncap] = request.url;
 			}
 		}	
 	}
@@ -34,19 +37,21 @@ chrome.runtime.onMessage.addListener(function (request,sender,sendResponse){
 				// checks if splitURL[4] is a chapter number
 				if (!isNaN(parseInt(splitURL2[1]))){
 					// update bookmark link to chapter/page
-					window.mangas[splitURL[4]] = request.url;
+					uncap = splitURL[4][0].toLowerCase() + splitURL[4].substring(1,);
+					window.mangas[uncap] = request.url;
 				}
 			}	
 		}
 	}
 	else if (request.url.includes("https://mangapark.net/")){
-		// MANGAPARK.N
+		// MANGAPARK.NET
 		// splitURL returns ["https:", "", "mangapark.net", "manga", "king-killer-reborn", "i2629416", "c55", "1"]
 		// splitURL[4] is the manga name and splitURL[6] is the chapter number
 		// check if url is a chapter of a manga
 		// if it is, add or update its bookmark
 		if (splitURL[6]){
-			window.mangas[splitURL[4]] = request.url;
+			uncap = splitURL[4][0].toLowerCase() + splitURL[4].substring(1,);
+			window.mangas[uncap] = request.url;
 		}
 	}
 	else if (request.url.includes("https://www.webtoons.com/")){
@@ -63,13 +68,99 @@ chrome.runtime.onMessage.addListener(function (request,sender,sendResponse){
 		if (splitURL[7]){
 			var splitURL2 = splitURL[7].split("=");
 			if(splitURL2[2]){
-				// checks if splitURL[4] is a chapter number
 				if (!isNaN(parseInt(splitURL2[2]))){
 					// update bookmark link to chapter/page
-					window.mangas[splitURL[5]] = request.url;
+					uncap = splitURL[5][0].toLowerCase() + splitURL[5].substring(1,);
+					window.mangas[uncap] = request.url;
 				}
 			}	
 		}
+	}
+	else if (request.url.includes("https://leviatanscans.com/")){
+		// LEVIATANSCANS.COM
+		// splitURL returns ["https:", "", "leviatanscans.com", "comics", "391190-max-level-returner", "1", "43"]
+		// splitURL[4] is the manga name, splitURL[5] is the volume number, and splitURL[6] is the chapter number
+		// check if url is a chapter of a manga
+		// if it is, add or update its bookmark
+		if (splitURL[5]){
+			var anothersplitURL = splitURL[4].split("-");
+			var mangaURLName = "";
+			for (j = 1; j < anothersplitURL.length; j++){
+				if (j === anothersplitURL.length - 1){
+					mangaURLName = mangaURLName + anothersplitURL[j];
+				}
+				else{
+					mangaURLName = mangaURLName + anothersplitURL[j] + "-";
+				}
+			}
+			if(splitURL[6]){
+				if (!isNaN(parseInt(splitURL[6]))){
+					// update bookmark link to chapter/page
+					uncap = mangaURLName[0].toLowerCase() + mangaURLName.substring(1,);
+					window.mangas[uncap] = request.url;
+				}
+			}	
+		}
+	}
+	else if (request.url.includes("https://mangasee123.com/")){
+		// MANGASEE123.COM
+		// splitURL returns ["https:", "", "mangasee123.com", "read-online", "A-Returners-Magic-Should-Be-Special-chapter-129-page-1.html"]
+		// splitURL[4] is the manga name, chapter number, and page number
+		// URLS
+		// https://mangasee123.com/read-online/Tensei-Shitara-Slime-Datta-Ken-chapter-78-page-1.html
+		// https://mangasee123.com/read-online/A-Returners-Magic-Should-Be-Special-chapter-129-page-1.html
+		if (splitURL[4]){
+			var splitURL2 = splitURL[4].split("-chapter-");
+			if(splitURL2[1]){
+				uncap = splitURL2[0][0].toLowerCase() + splitURL2[0].substring(1,);
+				window.mangas[uncap] = request.url;
+			}	
+		}
+	}
+	else if (request.url.includes("https://www.mangahere.cc/")){
+		// MANGAHERE.CC
+		// splitURL returns ["https:", "", "www.mangahere.cc", "manga", "the_max_level_hero_has_returned", "c028", "1.html#ipg1"]
+		// splitURL[4] is the manga name and splitURL[5] is the chapter number
+		// URLS
+		// https://www.mangahere.cc/manga/the_max_level_hero_has_returned/c028/1.html#ipg1
+		// https://www.mangahere.cc/manga/furidashi_ni_ochiru/c018/1.html
+		if (splitURL[5]){
+			uncap = splitURL[4][0].toLowerCase() + splitURL[4].substring(1,);
+			window.mangas[uncap] = request.url;
+		}
+	}
+	else if (request.url.includes("https://merakiscans.com/")){
+		// MERAKISCANS.COM
+		// splitURL returns ["https:", "", "merakiscans.com", "manga", "the-last-human", "292", ""]
+		// splitURL[4] is the manga name and splitURL[5] is the chapter number
+		// URLS
+		// https://merakiscans.com/manga/the-last-human/292/
+		// https://merakiscans.com/manga/lang-huan-library/78/
+		if (splitURL[5]){
+			uncap = splitURL[4][0].toLowerCase() + splitURL[4].substring(1,);
+			window.mangas[uncap] = request.url;
+		}
+	}
+	else if (request.url.includes("https://w11.mangafreak.net/Read1_")){
+		// W11.MANGAFREAK.NET
+		// splitURL returns ["https:", "", "w11.mangafreak.net", "Read1_Mato_Seihei_No_Slave_51"]
+		// splitURL[4] is the manga name and splitURL[5] is the chapter number
+		// URLS
+		// https://w11.mangafreak.net/Read1_Mato_Seihei_No_Slave_51
+		// https://w11.mangafreak.net/Read1_Release_That_Witch_217
+		var splitURL2 = request.url.split("Read1_");
+		var splitURL3 = splitURL2[1].split("_");
+		var mangaURLName  = '';
+		for (j = 0; j < splitURL3.length - 1; j++){
+			if (j === splitURL3.length - 2){
+				mangaURLName = mangaURLName + splitURL3[j];
+			}
+			else{
+				mangaURLName = mangaURLName + splitURL3[j] + '-';
+			}
+		}
+		uncap = mangaURLName[0].toLowerCase() + mangaURLName.substring(1,);
+		window.mangas[uncap] = request.url;
 	}
 	// else, do not add to manga list
 	// console.log(splitURL);
@@ -79,6 +170,10 @@ chrome.runtime.onMessage.addListener(function (request,sender,sendResponse){
 });
 
 
+// USE THIS TO CHECK FOR SPLITURL
+// var url = "https://leviatanscans.com/comics/391190-max-level-returner/1/43";
+// var spliturl = url.split("/")
+// console.log(spliturl);
 
 // chrome.browserAction.onClicked.addListener(function (tab) {
 //   chrome.tabs.create({url: 'bookmarks.html'})

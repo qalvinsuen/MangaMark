@@ -5,7 +5,7 @@
 
 	"content_scripts": [
 		{
-			"matches":["https://www.mangareader.net/*","https://mangahub.io/*","https://mangapark.net/*","https://www.webtoons.com/*"],
+			"matches":["https://www.mangareader.net/*","https://mangahub.io/*","https://mangapark.net/*","https://www.webtoons.com/*","https://leviatanscans.com/*","https://mangasee123.com/*","https://www.mangahere.cc/*","https://merakiscans.com/*","https://w11.mangafreak.net/*"],
 			"js":["content.js"]
 		}
 	],
