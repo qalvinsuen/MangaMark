@@ -8,4 +8,5 @@ https://www.mangareader.net/
 https://mangahub.io/
 https://www.webtoons.com/
 https://mangapark.net/
-The extension is currently under review to be published in the Chrome Web Store.
+You can find this extension in the Chrome Web Store.
+https://chrome.google.com/webstore/detail/mangamark/hnbidjafckbheomhmknhikgekehdlllf?hl=en
